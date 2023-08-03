@@ -26,6 +26,9 @@ use yii\web\UploadedFile;
  */
 class Video extends \yii\db\ActiveRecord
 {
+    const  STATUS_UNLISTED =0;
+    const  STATUS_PUBLISHED =1;
+
     /** @var UploadedFile */
     public $video;
     /**
@@ -56,6 +59,8 @@ class Video extends \yii\db\ActiveRecord
             [['video_id'], 'string', 'max' => 16],
             [['title', 'tags', 'video_name'], 'string', 'max' => 512],
             [['video_id'], 'unique'],
+            ['status','default','value'=>self::STATUS_UNLISTED],
+            ['has_thumbnail','default','value'=>0],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['created_by' => 'id']],
         ];
     }
@@ -107,13 +112,24 @@ class Video extends \yii\db\ActiveRecord
         }
         $saved =  parent::save($runValidation, $attributeNames);
         if (!$saved){return false;}
-        if (!$isInsert){
-            $videoPath = Yii::getAlias('@frontend/web/storage/videos/' .$this->video_id.'mp4');
+        if ($isInsert){
+            $videoPath = Yii::getAlias('@frontend/web/storage/videos/'.$this->video_id. '.mp4');
             if(!is_dir(dirname($videoPath))){
                 FileHelper::createDirectory(dirname($videoPath));
             }
             $this->video->saveAs($videoPath);
         }
         return true;
+    }
+    public function getVideoLink()
+    {
+        return Yii::$app->params['frontendUrl'].'storage/videos/' .$this->video_id. '.mp4';
+
+    }
+    public function getStatusLabels()
+    {
+        return [self::STATUS_UNLISTED => 'unlisted',
+            self::STATUS_PUBLISHED=> 'published',
+        ];
     }
 }
