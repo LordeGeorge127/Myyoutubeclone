@@ -2,6 +2,8 @@
 
 namespace common\models;
 
+use Imagine\Gd\Image;
+use Imagine\Image\Box;
 use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
@@ -64,6 +66,8 @@ class Video extends \yii\db\ActiveRecord
             [['video_id'], 'unique'],
             ['status','default','value'=>self::STATUS_UNLISTED],
             ['has_thumbnail','default','value'=>0],
+            ['thumbnail','image'],
+            ['video','file','extensions' =>['mp4']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['created_by' => 'id']],
         ];
     }
@@ -135,6 +139,10 @@ class Video extends \yii\db\ActiveRecord
                 FileHelper::createDirectory(dirname($thumbnailPath));
             }
             $this->thumbnail->saveAs($thumbnailPath);
+            \yii\imagine\Image::getImagine()
+                ->open($thumbnailPath)
+                ->thumbnail(new Box(1280,1280))
+                ->save();
         }
         return true;
     }
