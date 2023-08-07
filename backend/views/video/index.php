@@ -41,12 +41,25 @@ $this->params['breadcrumbs'][] = $this->title;
             'created_at:datetime',
             'updated_at:datetime',
             //'created_by',
-            [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, video $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'video_id' => $model->video_id]);
-                 }
-            ],
+//            [
+//                'class' => ActionColumn::className(),
+//                'urlCreator' => function ($action, video $model, $key, $index, $column) {
+//                    return Url::toRoute([$action, 'video_id' => $model->video_id]);
+//                 }
+//            ],
+                [
+                        'class' => ActionColumn::className(),
+                        'buttons'=>[
+                                'delete'=>function($url,$model){
+                                $url = ['delete','video_id'=>$model->video_id];
+                                    return Html::a('Delete',$url,[
+                                            'data-method'=>'post',
+                                        'data-confirm'=>'Are you sure you want to delete this video?'
+                                    ]);
+                                }
+                        ]
+
+                ]
         ],
     ]); ?>
 
