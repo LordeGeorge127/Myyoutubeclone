@@ -10,6 +10,8 @@ return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'name'=> 'Youtube',
+    'defaultRoute'=>'/video/index',
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
         'request' => [

@@ -25,6 +25,9 @@ use yii\web\UploadedFile;
  * @property int|null $created_by
  *
  * @property User $createdBy
+ * @property  VideoLike[] $likes
+ *  * @property  VideoLike[] $dislikes
+
  */
 class Video extends \yii\db\ActiveRecord
 {
@@ -161,5 +164,38 @@ class Video extends \yii\db\ActiveRecord
         return [self::STATUS_UNLISTED => 'unlisted',
             self::STATUS_PUBLISHED=> 'published',
         ];
+    }
+    public function afterDelete()
+    {
+        parent::afterDelete();
+        $videoPath = Yii::getAlias('@frontend/web/storage/videos/'.$this->video_id);
+        $thumbnailPath = Yii::getAlias('@frontend/web/storage/thumbs/'.$this->video_id);
+        unlink($videoPath);
+        if (file_exists($thumbnailPath)){
+            unlink($thumbnailPath);
+        }
+
+    }
+    public function getViews()
+    {
+        return $this->hasMany(VideoView::class,['video_id' => 'video_id']);
+    }
+    public function getLikes()
+    {
+        return $this->hasMany(VideoLike::class,['video_id' => 'video_id'])
+            ->liked();
+    }
+    public function getDislikes()
+    {
+        return $this->hasMany(VideoLike::class,['video_id' => 'video_id'])
+            ->disliked();
+    }
+    public function isLikedBy($userId)
+    {
+        VideoLike::find()->userIdVideoId($userId,$this->video_id)->liked()->one();
+    }
+    public function isDislikedBy($userId)
+    {
+        VideoLike::find()->userIdVideoId($userId,$this->video_id)->disliked()->one();
     }
 }

@@ -2,14 +2,12 @@
 
 namespace common\models\query;
 
-use common\models\Video;
-
 /**
- * This is the ActiveQuery class for [[\common\models\Video]].
+ * This is the ActiveQuery class for [[\common\models\VideoView]].
  *
- * @see \common\models\Video
+ * @see \common\models\VideoView
  */
-class VideoQuery extends \yii\db\ActiveQuery
+class VideoViewQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -18,7 +16,7 @@ class VideoQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return \common\models\Video[]|array
+     * @return \common\models\VideoView[]|array
      */
     public function all($db = null)
     {
@@ -27,14 +25,10 @@ class VideoQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return \common\models\Video|array|null
+     * @return \common\models\VideoView|array|null
      */
     public function one($db = null)
     {
         return parent::one($db);
-    }
-    public function published()
-    {
-        return $this->andWhere(['status'=>Video::STATUS_PUBLISHED]);
     }
 }

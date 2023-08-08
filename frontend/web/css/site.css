@@ -25,6 +25,12 @@ aside .nav-pills .nav-link.active {
     color: #b90000;
     border-left: 4px solid #b90000;
 }
+body{
+    padding-bottom:100px
+}
+.content-wrapper{
+    margin-bottom:200px;
+}
 .upload-icon {
     width: 200px;
     height: 200px;

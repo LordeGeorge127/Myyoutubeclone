@@ -1,9 +1,14 @@
 <?php
 
 /** @var yii\web\View $this */
+/** @var \yii\data\ActiveDataProvider $dataProvider */
+
 
 $this->title = 'My Yii Application';
 ?>
-<div class="site-index">
-    front
-</div>
+
+    <?php echo \yii\widgets\ListView::widget([
+            'dataProvider'=>$dataProvider
+
+])?>
+

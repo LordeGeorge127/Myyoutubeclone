@@ -3,7 +3,6 @@
 ?>
 
 <div class="media">
-
         <div class="embed-responsive embed-responsive-16by9 " >
             <video class="embed-responsive-item"
                    poster="<?php echo $model->getThumbnailLink()?>"
